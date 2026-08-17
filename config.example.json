@@ -1,0 +1,11 @@
+{
+  "Modules": {
+    "Glint Color": {
+      "keybind": 0,
+      "keybindActive": true,
+      "masterEnabled": true,
+      "glintColor": "#55FFFF",
+      "glintOpacity": 0.8
+    }
+  }
+}
