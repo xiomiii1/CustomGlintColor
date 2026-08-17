@@ -1,32 +1,17 @@
-name: Build Custom Glint Color
+- name: Build and package
+  run: |
+    xmake f -y -p android -a arm64-v8a -m release \
+      --ndk=/opt/hostedtoolcache/ndk/r28c/x64
 
-on:
-  push:
-    branches: [main, master]
-  pull_request:
-  workflow_dispatch:
+    xmake -y -m release
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    mkdir -p package
 
-      - name: Setup xmake
-        uses: xmake-io/github-action-setup-xmake@v1
+    cp build/android/arm64-v8a/release/libCustomGlintColor.so \
+       package/libCustomGlintColor.so
 
-      - uses: nttld/setup-ndk@v1
-        id: ndk
-        with:
-          ndk-version: r28c
+    cp assets/customglintcolor.png \
+       package/customglintcolor.png
 
-      - name: Build and package
-        run: |
-          xmake f -y -p android -a arm64-v8a -m release --ndk=${{ steps.ndk.outputs.ndk-path }}
-          xmake -y
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: CustomGlintColor-levipack
-          path: build/android/arm64-v8a/release/CustomGlintColor.levipack
-          if-no-files-found: error
+    cd package
+    zip -r ../CustomGlintColor.levipack .
